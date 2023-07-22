@@ -12,6 +12,7 @@ const minutes = timer.querySelector("[data-minutes]");
 const seconds = timer.querySelector("[data-seconds]");
 
 startBtn.disabled = true;
+let selectedDate;
 
 const options = {
   enableTime: true,
@@ -20,7 +21,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
-    const selectedDate = selectedDates[0];
+    selectedDate = selectedDates[0];
     if (selectedDate <= new Date()) {
        Notiflix.Notify.failure("Please choose a date in the future");
     } else {
@@ -37,15 +38,14 @@ function startTimer() {
     const intervalId = setInterval(() => {
       dateTimePicker.disabled = true;
     const currentTime = new Date();
-    const targetDate = new Date(dateTimePicker.value);
-    const timeLeft = convertMs(targetDate - currentTime);
+    const timeLeft = convertMs(selectedDate - currentTime);
  days.textContent = addLeadingZero(timeLeft.days);
     hours.textContent = addLeadingZero(timeLeft.hours);
     minutes.textContent = addLeadingZero(timeLeft.minutes);
     seconds.textContent = addLeadingZero(timeLeft.seconds);
      if (timeLeft.days <= 0 && timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
          clearInterval(intervalId);
-         dateTimePicker.disabled = false;
+       dateTimePicker.disabled = false;
          startBtn.disabled = true;
     }
   }, 1000);

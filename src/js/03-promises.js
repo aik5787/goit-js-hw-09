@@ -23,8 +23,14 @@ function onSubmit(event) {
   const step = Number(form.elements.step.value);
   const amount = Number(form.elements.amount.value);
 
-    for (let i = 1; i <= amount; i += 1) {
-    createPromise(i, firstDelay + i * step)
+  if (step < 0 || firstDelay < 0 || amount <= 0) {
+    Notiflix.Notify.failure('Invalid input values. Please make sure Delay step is >= 0, firstDelay is >= 0, and amount is > 0.');
+    return;
+  }
+
+  for (let i = 1; i <= amount; i += 1) {
+      const currentDelay = i === 1 ? firstDelay : firstDelay + (i-1) * step;
+    createPromise(i, currentDelay)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
